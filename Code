@@ -74,7 +74,7 @@ local function audiologger(v)
             if lastid ~= v.SoundId and not string.find(v.SoundId,'rbxasset://') then
                 lastid = v.SoundId
                 chatappend = chatappend .. string.format('\n\nAudio changed to: %s [%s] ( %s )',lastid,getparentname(v),currenttime())
-                writefile(audio,chatappend)
+                writefile(audio,audioappend)
             end
         end)
     end
