@@ -27,7 +27,7 @@ local chat = string.format("ROBLOX-Logs/Log_%s/ChatLog.txt",z)
 local mainappend = string.format('Log started ( %s | %s )\n\nGameId: %s\nPlaceId: %s\nLogger User: %s (%s)',currenttime(),currentdate(),game.GameId,game.PlaceId,game.Players.LocalPlayer.Name,game.Players.LocalPlayer.DisplayName)
 local audioappend = ''
 local chatappend = ''
-writefile(file,append)
+writefile(file,mainappend)
 writefile(audio,'')
 writefile(chat,'')
 
