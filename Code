@@ -11,12 +11,17 @@ end
 local function currenttime()
     local TimeInUnix = os.time()
     local stringToFormat = "%I:%M %p"
-    local result = os.date(stringToFormat, TimeInUnix)
-    return result
+    return os.date(stringToFormat, TimeInUnix)
+end
+
+local function currentdate()
+    local TimeInUnix = os.time()
+    local stringToFormat = "%m/%d/%Y"
+    return os.date(stringToFormat, TimeInUnix)
 end
 
 local file = string.format("ROBLOX-Logs/Log_%s.txt",z)
-local append = string.format('Log started ( %s )\n\nGameId: %s\nPlaceId: %s\nLogger User: %s (%s)',currenttime(),game.GameId,game.PlaceId,game.Players.LocalPlayer.Name,game.Players.LocalPlayer.DisplayName)
+local append = string.format('Log started ( %s | %s )\n\nGameId: %s\nPlaceId: %s\nLogger User: %s (%s)',currenttime(),currentdate(),game.GameId,game.PlaceId,game.Players.LocalPlayer.Name,game.Players.LocalPlayer.DisplayName)
 writefile(file,append)
 
 local function plrfunction(p)
