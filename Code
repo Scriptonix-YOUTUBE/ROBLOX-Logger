@@ -1,0 +1,78 @@
+
+if not isfolder('ROBLOX-Logs') then
+    makefolder('ROBLOX-Logs')
+end
+local z = 1
+while isfile(string.format("ROBLOX-Logs/Log_%s.txt",z)) do
+    z = z + 1
+end
+
+
+local function currenttime()
+    local TimeInUnix = os.time()
+    local stringToFormat = "%I:%M %p"
+    local result = os.date(stringToFormat, TimeInUnix)
+    return result
+end
+
+local file = string.format("ROBLOX-Logs/Log_%s.txt",z)
+local append = string.format('Log started ( %s )\n\nGameId: %s\nPlaceId: %s\nLogger User: %s (%s)',currenttime(),game.GameId,game.PlaceId,game.Players.LocalPlayer.Name,game.Players.LocalPlayer.DisplayName)
+writefile(file,append)
+
+local function plrfunction(p)
+    p.CharacterAdded:Connect(function(c)
+        append = append .. string.format('\n\nPlayer spawned: %s [%s] ( %s )',p.Name,p.DisplayName,currenttime())
+        writefile(file,append)
+    end)
+    p.Chatted:Connect(function(msg)
+        if p.Name ~= p.DisplayName then
+            append = append .. string.format('\n\n[%s (%s)]: %s ( %s )',p.Name,p.DisplayName,msg,currenttime())
+        else
+            append = append .. string.format('\n\n[%s]: %s ( %s )',p.Name,msg,currenttime())
+        end
+        writefile(file,append)
+    end)
+end
+
+for _, p in pairs(game.Players:GetPlayers()) do
+    plrfunction(p)
+end
+
+game.Players.PlayerAdded:Connect(function(p)
+    append = append .. string.format('\n\nPlayer joined: %s [%s] ( %s )',p.Name,p.DisplayName,currenttime())
+    writefile(file,append)
+    plrfunction(p)
+end)
+
+game.Players.PlayerRemoving:Connect(function(p)
+    append = append .. string.format('\n\nPlayer left: %s [%s] ( %s )',p.Name,p.DisplayName,currenttime())
+    writefile(file,append)
+end)
+
+local function getparentname(v)
+    return v:FindFirstAncestorWhichIsA('Model').Name or v.Parent.Nane
+end
+
+local sounds = {}
+local function audiologger(v)
+    table.insert(sounds,v)
+    local lastid = nil
+    v.Changed:Connect(function()
+        if lastid ~= v.SoundId and not string.find(v.SoundId,'rbxasset://') then
+            append = append .. string.format('\n\nAudio started: %s [%s] ( %s )',v.SoundId,getparentname(v),currenttime())
+            writefile(file,append)
+        end
+    end)
+end
+
+for _, v in pairs(game:GetDescendants()) do
+    if v:IsA('Sound') then
+        audiologger(v)
+    end
+end
+
+game.DescendantAdded:Connect(function(v)
+        if v:IsA('Sound') and not table.find(sounds,v) then
+            audiologger(v)
+        end
+    end)
