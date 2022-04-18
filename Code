@@ -62,13 +62,15 @@ local sounds = {}
 local function audiologger(v)
     table.insert(sounds,v)
     local lastid = nil
-    v.Changed:Connect(function()
-        if lastid ~= v.SoundId and not string.find(v.SoundId,'rbxasset://') then
-            lastid = v.SoundId
-            append = append .. string.format('\n\nAudio changed to: %s [%s] ( %s )',lastid,getparentname(v),currenttime())
-            writefile(file,append)
-        end
-    end)
+    if v.Parent then
+        v.Changed:Connect(function()
+            if lastid ~= v.SoundId and not string.find(v.SoundId,'rbxasset://') then
+                lastid = v.SoundId
+                append = append .. string.format('\n\nAudio changed to: %s [%s] ( %s )',lastid,getparentname(v),currenttime())
+                writefile(file,append)
+            end
+        end)
+    end
 end
 
 for _, v in pairs(game:GetDescendants()) do
