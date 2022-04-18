@@ -24,23 +24,25 @@ end
 local file = string.format("ROBLOX-Logs/Log_%s/MainLog.txt",z)
 local audio = string.format("ROBLOX-Logs/Log_%s/AudioLog.txt",z)
 local chat = string.format("ROBLOX-Logs/Log_%s/ChatLog.txt",z)
-local append = string.format('Log started ( %s | %s )\n\nGameId: %s\nPlaceId: %s\nLogger User: %s (%s)',currenttime(),currentdate(),game.GameId,game.PlaceId,game.Players.LocalPlayer.Name,game.Players.LocalPlayer.DisplayName)
+local mainappend = string.format('Log started ( %s | %s )\n\nGameId: %s\nPlaceId: %s\nLogger User: %s (%s)',currenttime(),currentdate(),game.GameId,game.PlaceId,game.Players.LocalPlayer.Name,game.Players.LocalPlayer.DisplayName)
+local audioappend = ''
+local chatappend = ''
 writefile(file,append)
 writefile(audio,'')
 writefile(chat,'')
 
 local function plrfunction(p)
     p.CharacterAdded:Connect(function(c)
-        append = append .. string.format('\n\nPlayer spawned: %s [%s] ( %s )',p.Name,p.DisplayName,currenttime())
-        writefile(file,append)
+        mainappend = mainappend .. string.format('\n\nPlayer spawned: %s [%s] ( %s )',p.Name,p.DisplayName,currenttime())
+        writefile(file,mainappend)
     end)
     p.Chatted:Connect(function(msg)
         if p.Name ~= p.DisplayName then
-            append = append .. string.format('\n\n[%s (%s)]: %s ( %s )',p.Name,p.DisplayName,msg,currenttime())
+            chatappend = chatappend .. string.format('\n\n[%s (%s)]: %s ( %s )',p.Name,p.DisplayName,msg,currenttime())
         else
-            append = append .. string.format('\n\n[%s]: %s ( %s )',p.Name,msg,currenttime())
+            chatappend = chatappend .. string.format('\n\n[%s]: %s ( %s )',p.Name,msg,currenttime())
         end
-        writefile(chat,append)
+        writefile(chat,chatappend)
     end)
 end
 
@@ -49,14 +51,14 @@ for _, p in pairs(game.Players:GetPlayers()) do
 end
 
 game.Players.PlayerAdded:Connect(function(p)
-    append = append .. string.format('\n\nPlayer joined: %s [%s] ( %s )',p.Name,p.DisplayName,currenttime())
-    writefile(file,append)
+    mainappend = mainappend .. string.format('\n\nPlayer joined: %s [%s] ( %s )',p.Name,p.DisplayName,currenttime())
+    writefile(file,mainappend)
     plrfunction(p)
 end)
 
 game.Players.PlayerRemoving:Connect(function(p)
-    append = append .. string.format('\n\nPlayer left: %s [%s] ( %s )',p.Name,p.DisplayName,currenttime())
-    writefile(file,append)
+    mainappend = mainappend .. string.format('\n\nPlayer left: %s [%s] ( %s )',p.Name,p.DisplayName,currenttime())
+    writefile(file,mainappend)
 end)
 
 local function getparentname(v)
@@ -71,8 +73,8 @@ local function audiologger(v)
         v.Changed:Connect(function()
             if lastid ~= v.SoundId and not string.find(v.SoundId,'rbxasset://') then
                 lastid = v.SoundId
-                append = append .. string.format('\n\nAudio changed to: %s [%s] ( %s )',lastid,getparentname(v),currenttime())
-                writefile(audio,append)
+                chatappend = chatappend .. string.format('\n\nAudio changed to: %s [%s] ( %s )',lastid,getparentname(v),currenttime())
+                writefile(audio,chatappend)
             end
         end)
     end
