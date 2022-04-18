@@ -3,9 +3,10 @@ if not isfolder('ROBLOX-Logs') then
     makefolder('ROBLOX-Logs')
 end
 local z = 1
-while isfile(string.format("ROBLOX-Logs/Log_%s.txt",z)) do
+while isfolder(string.format("ROBLOX-Logs/Log_%s",z)) do
     z = z + 1
 end
+makefolder(string.format("ROBLOX-Logs/Log_%s",z))
 
 
 local function currenttime()
@@ -20,9 +21,13 @@ local function currentdate()
     return os.date(stringToFormat, TimeInUnix)
 end
 
-local file = string.format("ROBLOX-Logs/Log_%s.txt",z)
+local file = string.format("ROBLOX-Logs/Log_%s/MainLog",z)
+local audio = string.format("ROBLOX-Logs/Log_%s/AudioLog",z)
+local chat = string.format("ROBLOX-Logs/Log_%s/ChatLog",z)
 local append = string.format('Log started ( %s | %s )\n\nGameId: %s\nPlaceId: %s\nLogger User: %s (%s)',currenttime(),currentdate(),game.GameId,game.PlaceId,game.Players.LocalPlayer.Name,game.Players.LocalPlayer.DisplayName)
 writefile(file,append)
+writefile(audio,'')
+writefile(chat,'')
 
 local function plrfunction(p)
     p.CharacterAdded:Connect(function(c)
@@ -35,7 +40,7 @@ local function plrfunction(p)
         else
             append = append .. string.format('\n\n[%s]: %s ( %s )',p.Name,msg,currenttime())
         end
-        writefile(file,append)
+        writefile(chat,append)
     end)
 end
 
@@ -67,7 +72,7 @@ local function audiologger(v)
             if lastid ~= v.SoundId and not string.find(v.SoundId,'rbxasset://') then
                 lastid = v.SoundId
                 append = append .. string.format('\n\nAudio changed to: %s [%s] ( %s )',lastid,getparentname(v),currenttime())
-                writefile(file,append)
+                writefile(audio,append)
             end
         end)
     end
