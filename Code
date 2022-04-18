@@ -55,7 +55,7 @@ game.Players.PlayerRemoving:Connect(function(p)
 end)
 
 local function getparentname(v)
-    return v:FindFirstAncestorWhichIsA('Model').Name or v.Parent.Nane
+    return (v:FindFirstAncestorWhichIsA('Model') or v.Parent).Name
 end
 
 local sounds = {}
