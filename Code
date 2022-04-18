@@ -59,7 +59,8 @@ local function audiologger(v)
     local lastid = nil
     v.Changed:Connect(function()
         if lastid ~= v.SoundId and not string.find(v.SoundId,'rbxasset://') then
-            append = append .. string.format('\n\nAudio started: %s [%s] ( %s )',v.SoundId,getparentname(v),currenttime())
+            lastid = v.SoundId
+            append = append .. string.format('\n\nAudio changed to: %s [%s] ( %s )',lastid,getparentname(v),currenttime())
             writefile(file,append)
         end
     end)
