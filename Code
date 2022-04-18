@@ -21,9 +21,9 @@ local function currentdate()
     return os.date(stringToFormat, TimeInUnix)
 end
 
-local file = string.format("ROBLOX-Logs/Log_%s/MainLog",z)
-local audio = string.format("ROBLOX-Logs/Log_%s/AudioLog",z)
-local chat = string.format("ROBLOX-Logs/Log_%s/ChatLog",z)
+local file = string.format("ROBLOX-Logs/Log_%s/MainLog.txt",z)
+local audio = string.format("ROBLOX-Logs/Log_%s/AudioLog.txt",z)
+local chat = string.format("ROBLOX-Logs/Log_%s/ChatLog.txt",z)
 local append = string.format('Log started ( %s | %s )\n\nGameId: %s\nPlaceId: %s\nLogger User: %s (%s)',currenttime(),currentdate(),game.GameId,game.PlaceId,game.Players.LocalPlayer.Name,game.Players.LocalPlayer.DisplayName)
 writefile(file,append)
 writefile(audio,'')
