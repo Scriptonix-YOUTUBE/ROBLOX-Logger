@@ -24,12 +24,15 @@ end
 local file = string.format("ROBLOX-Logs/Log_%s/MainLog.txt",z)
 local audio = string.format("ROBLOX-Logs/Log_%s/AudioLog.txt",z)
 local chat = string.format("ROBLOX-Logs/Log_%s/ChatLog.txt",z)
+local console = string.format("ROBLOX-Logs/Log_%s/OutputLog.txt",z)
 local mainappend = string.format('Log started ( %s | %s )\n\nGameId: %s\nPlaceId: %s\nLogger User: %s (%s)',currenttime(),currentdate(),game.GameId,game.PlaceId,game.Players.LocalPlayer.Name,game.Players.LocalPlayer.DisplayName)
-local audioappend = ''
-local chatappend = ''
+local audioappend = mainappend
+local chatappend = mainappend
+local outappend = mainappend
 writefile(file,mainappend)
-writefile(audio,'')
-writefile(chat,'')
+writefile(audio,mainappend)
+writefile(chat,mainappend)
+writefile(console,mainappend)
 
 local function plrfunction(p)
     p.CharacterAdded:Connect(function(c)
@@ -90,4 +93,9 @@ game.DescendantAdded:Connect(function(v)
         if v:IsA('Sound') and not table.find(sounds,v) then
             audiologger(v)
         end
-    end)
+end)
+
+game:GetService('LogService').MessageOut:Connect(function(mess,ty)
+	outappend = outappend .. string.format('\n%s Type: %s ( %s )',mess,ty.Name,currenttime())
+    writefile(console,outappend)
+end)
